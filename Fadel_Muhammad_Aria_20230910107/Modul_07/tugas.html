@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pengelolaan Lowongan Kerja</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        const apiUrl = 'https://script.google.com/macros/s/AKfycbwkRRMMUNASVXR859cdjGTTChw4O3cJVd-0zjHlcs061qgxiA9TiWDDAikVB2SdbxKS/exec';
+
+        function fetchJobs() {
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    const jobList = document.getElementById('jobList');
+                    jobList.innerHTML = '';
+                    data.forEach(job => {
+                        const jobItem = document.createElement('li');
+                        jobItem.textContent = `ID: ${job[0]}, Judul: ${job[1]}, Deskripsi: ${job[2]}, Lokasi: ${job[3]}, Status: ${job[4]}, Gaji: ${job[5]}`;
+                        jobList.appendChild(jobItem);
+                    });
+                })
+                .catch(error => console.error('Error fetching jobs:', error));
+        }
+
+        function addJob() {
+            const id = document.getElementById('addId').value;
+            const title = document.getElementById('addTitle').value;
+            const description = document.getElementById('addDescription').value;
+            const location = document.getElementById('addLocation').value;
+            const status = document.getElementById('addStatus').value;
+            const salary = document.getElementById('addSalary').value;
+
+            fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `action=add&id=${id}&title=${title}&description=${description}&location=${location}&status=${status}&salary=${salary}`
+            })
+            .then(response => response.text())
+            .then(data => {
+                alert(data);
+                fetchJobs(); // Refresh the job list
+            })
+            .catch(error => console.error('Error adding job:', error));
+        }
+
+        function updateJob() {
+            const id = document.getElementById('updateId').value;
+            const title = document.getElementById('updateTitle').value;
+            const description = document.getElementById('updateDescription').value;
+            const location = document.getElementById('updateLocation').value;
+            const status = document.getElementById('updateStatus').value;
+            const salary = document.getElementById('updateSalary').value;
+
+            fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `action=update&id=${id}&title=${title}&description=${description}&location=${location}&status=${status}&salary=${salary}`
+            })
+            .then(response => response.text())
+            .then(data => {
+                alert(data);
+                fetchJobs(); // Refresh the job list
+            })
+            .catch(error => console.error('Error updating job:', error));
+        }
+
+        function deleteJob() {
+            const id = document.getElementById('deleteId').value;
+
+            fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `action=delete&id=${id}`
+            })
+            .then(response => response.text())
+            .then(data => {
+                alert(data);
+                fetchJobs(); // Refresh the job list
+            })
+            .catch(error => console.error('Error deleting job:', error));
+        }
+    </script>
+</head>
+<body onload="fetchJobs()">
+    <div class="container">
+        <h1>Pengelolaan Lowongan Kerja</h1>
+
+        <h2>Tambah Lowongan Kerja</h2>
+        <input type="text" id="addId" placeholder="ID" required>
+        <input type="text" id="addTitle" placeholder="Judul Pekerjaan" required>
+        <input type="text" id="addDescription" placeholder="Deskripsi" required>
+        <input type="text" id="addLocation" placeholder="Lokasi" required>
+        <input type="text" id="addStatus" placeholder="Status" required>
+        <input type="text" id="addSalary" placeholder="Gaji">
+        <button onclick="addJob()">Tambah</button>
+
+        <h2>Perbarui Lowongan Kerja</h2>
+        <input type="text" id="updateId" placeholder="ID Lowongan" required>
+        <input type="text" id="updateTitle" placeholder="Judul Pekerjaan">
+        <input type="text" id="updateDescription" placeholder="Deskripsi">
+        <input type="text" id="updateLocation" placeholder="Lokasi">
+        <input type="text" id="updateStatus" placeholder="Status">
+        <input type="text" id="updateSalary" placeholder="Gaji">
+        <button onclick="updateJob()">Perbarui</button>
+
+        <h2>Hapus Lowongan Kerja</h2>
+        <input type="text" id="deleteId" placeholder="ID Lowongan yang Dihapus" required>
+        <button onclick="deleteJob()">Hapus</button>
+
+        <h2>Daftar Lowongan Kerja</h2>
+        <ul id="jobList"></ul>
+    </div>
+</body>
+</html>
