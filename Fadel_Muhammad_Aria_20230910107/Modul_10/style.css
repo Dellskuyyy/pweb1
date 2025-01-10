@@ -1,0 +1,27 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+header {
+    background-color: #007bff;
+}
+
+footer {
+    background-color: #f8f9fa;
+}
+#top a {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    display: none; /* Sembunyikan tombol secara default */
+}
+.rounded-circle {
+    border-radius: 50%;
+    object-fit: cover; /* Memastikan gambar terpotong sesuai bingkai */
+    width: 192px; /* Atur lebar sesuai kebutuhan */
+    height: 192px; /* Atur tinggi sesuai kebutuhan */
+}
+.img-fit {
+    height: 200px; /* Set a fixed height for all images */
+    object-fit: cover; /* Ensure the image covers the area without distortion */
+}
